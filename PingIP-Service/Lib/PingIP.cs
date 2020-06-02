@@ -35,6 +35,7 @@ namespace PingIP_Service
                 pingIp.SendAsync(ip.IpAddress, updRate, ip.IpAddress);
             }
             IpTableSavingXml();
+            m61850.UpdateComtradeFiles();
         }
 
         private void PingIp_PingCompleted(object sender, PingCompletedEventArgs e)

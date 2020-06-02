@@ -20,8 +20,8 @@ namespace PingIP_Service
 
                 x.RunAsLocalSystem();
 
-                x.SetServiceName(@"ICPs61850");
-                x.SetDisplayName(@"ICPs61850-Service");
+                x.SetServiceName(@"ICP61850");
+                x.SetDisplayName(@"ICP61850-Service");
                 x.SetDescription(@"Iec61850 Server is Listening on Port 102. The Project is for Yantian by ICPSI.");
 
 
