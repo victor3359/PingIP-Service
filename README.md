@@ -1,6 +1,6 @@
 # PingIP-Service
 
-PingIP to Xml and IEC61850 Client & Server.
+PingIP status transfer to Xml format and IEC61850 Client & Server.
 
 ## Getting Started
 
