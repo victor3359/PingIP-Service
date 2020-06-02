@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>PingIP_Service</RootNamespace>
+    <ApplicationIcon>ICPSI-Logo.ico</ApplicationIcon>
+    <Authors>JunWei Liu</Authors>
+    <Company>ICPSI</Company>
+    <Version>1.0.3</Version>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Topshelf" Version="4.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="iec61850dotnet">
+      <HintPath>..\..\..\..\..\..\DLL\iec61850dotnet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
