@@ -45,9 +45,10 @@ namespace PingIP_Service
 				/* Download file from server and write it to a new local file 
 				FileStream fs = new FileStream(filename, FileMode.Create);
 				BinaryWriter w = new BinaryWriter(fs);*/
+				Directory.CreateDirectory("COMTRADE");
 				foreach (string entry in serverDirectory)
 				{
-					string filename = $"{AppDomain.CurrentDomain.BaseDirectory}//{entry}";
+					string filename = $"{AppDomain.CurrentDomain.BaseDirectory}{entry.Replace("/","\\")}";
 					
 					Console.WriteLine("Download file " + filename);
 

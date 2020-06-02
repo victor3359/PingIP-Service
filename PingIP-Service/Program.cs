@@ -10,7 +10,7 @@ namespace PingIP_Service
         {
             var exitCode = HostFactory.Run(x =>
             {
-                Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
+                Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
                 x.Service<PingIP>(s =>
                 {
                     s.ConstructUsing(PingIP => new PingIP());
