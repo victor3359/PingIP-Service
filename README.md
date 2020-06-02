@@ -25,7 +25,7 @@ Add additional notes about how to deploy this on a live system
 * Windows Service
 * IEC61850 SERVER
 * IEC61850 CLIENT
-* Xml
+* XML
 
 ## Built With
 
