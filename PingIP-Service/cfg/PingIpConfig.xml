@@ -1,0 +1,13 @@
+<Service>
+    <Info>
+        <Vendor>ICPSI</Vendor>
+        <Author>Victor</Author>
+        <UpdateRate>1000</UpdateRate>
+    </Info>
+    <IpTable>
+        <Row MachineName="Localhost" IpAddress="127.0.0.1"/>
+        <Row MachineName="加慧" IpAddress="192.168.100.110"/>
+        <Row MachineName="延祥" IpAddress="192.168.100.31"/>
+        <Row MachineName="ICPSI-Testset" IpAddress="192.168.100.22"/>
+    </IpTable>
+</Service>
