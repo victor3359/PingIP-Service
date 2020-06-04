@@ -1,9 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 
 using IEC61850.Client;
 using IEC61850.Common;
-using System.IO;
 
 namespace PingIP_Service
 {
@@ -22,7 +22,7 @@ namespace PingIP_Service
 
 			try
 			{
-				_conn.Connect(_host, 102);
+				IedConnect();
 
 				Console.WriteLine("Files in server root directory:");
 				List<string> serverDirectory = _conn.GetServerDirectory(true);
@@ -31,19 +31,22 @@ namespace PingIP_Service
 				{
 					Console.WriteLine(entry);
 				}
-
-				DirectoryInfo di = new DirectoryInfo("COMTRADE");
-				foreach (var fi in di.GetFiles())
-				{
-					fileList.Add($"/COMTRADE/{fi.Name}");
-				}
-
+				
 				Console.WriteLine();
 				Console.WriteLine("File directory tree at server:");
 				printFiles(_conn, "", "");
 				Console.WriteLine();
 
-				//_conn.Abort();
+				if (!Directory.Exists(@"COMTRADE"))
+				{
+					Directory.CreateDirectory(@"COMTRADE");
+				}
+				DirectoryInfo di = new DirectoryInfo(@"COMTRADE");
+				foreach (var fi in di.GetFiles())
+				{
+					fileList.Add($"/COMTRADE/{fi.Name}");
+				}
+				_conn.Abort();
 			}
 			catch (IedConnectionException e)
 			{
@@ -52,10 +55,16 @@ namespace PingIP_Service
 
 			//_conn.Dispose();
 		}
+		private void IedConnect() => _conn.Connect(_host, 102);
+		public IedConnectionState GetState()
+		{
+			return _conn.GetState();
+		}
 		public void UpdateComtradeFiles()
 		{
+			IedConnect();
 			List<string> serverDirectory = _conn.GetServerDirectory(true);
-			
+
 			foreach (string entry in serverDirectory)
 			{
 				string tmp = entry.Replace("/", "\\");
@@ -70,6 +79,7 @@ namespace PingIP_Service
 					fs.Close();
 				}
 			}
+			_conn.Abort();
 		}
 
 		public static void printFiles(IedConnection con, string prefix, string parent)

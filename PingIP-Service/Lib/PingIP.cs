@@ -4,6 +4,8 @@ using System.Linq;
 using System.Timers;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using IEC61850.Client;
+using IEC61850.Common;
 
 namespace PingIP_Service
 {
@@ -15,14 +17,13 @@ namespace PingIP_Service
         private static string xmlConfigFileName = @"PingIpConfig.xml";
         private static string xmlOutputFileName = @"PingIpOutput.xml";
         s61850 s61850;
-        m61850 m61850;
+        //m61850 m61850;
 
         public PingIP()
         {
             ReadConfiguration();
             _timer = new Timer(updRate) { AutoReset = true };
             _timer.Elapsed += timerElapsed;
-
         }
 
         private void timerElapsed(object sender, ElapsedEventArgs e)
@@ -35,7 +36,10 @@ namespace PingIP_Service
                 pingIp.SendAsync(ip.IpAddress, updRate, ip.IpAddress);
             }
             IpTableSavingXml();
-            m61850.UpdateComtradeFiles();
+            /*if(m61850.GetState() != IedConnectionState.IED_STATE_CONNECTING)
+            {
+                m61850.UpdateComtradeFiles();
+            }*/
         }
 
         private void PingIp_PingCompleted(object sender, PingCompletedEventArgs e)
@@ -66,17 +70,18 @@ namespace PingIP_Service
             XmlDocument doc = new XmlDocument();
             XmlElement root = doc.CreateElement(@"IpTable");
             int Ind = 1;
-            string ValueStr;
+            string NumState, StrState;
             doc.AppendChild(root);
             IpTable.ForEach(x =>
             {
                 XmlElement newNode = doc.CreateElement(@"Row");
                 newNode.SetAttribute(@"MachineName", x.MachineName);
                 newNode.SetAttribute(@"IpAddress", x.IpAddress);
-                ValueStr = x.IpStatus == IPStatus.Success ? @"true" : @"false";
-                newNode.InnerText = ValueStr;
+                NumState = x.IpStatus == IPStatus.Success ? @"1" : @"0";
+                StrState = x.IpStatus == IPStatus.Success ? @"true" : @"false";
+                newNode.InnerText = NumState;
                 root.AppendChild(newNode);
-                s61850.ModifySpsValue($"CSharp/GGIO1.Ind{Ind}", ValueStr);
+                s61850.ModifySpsValue($"CSharp/STGGIO1.Ind{Ind}", StrState);
                 Ind++;
             });
             doc.Save(xmlOutputFileName);
@@ -97,7 +102,7 @@ namespace PingIP_Service
             try
             {
                 s61850 = new s61850();
-                m61850 = new m61850("192.168.100.195");
+                //m61850 = new m61850("192.168.100.195");
                 xmlconf.Load(xmlConfigFileName);
 
                 xmlNode = xmlconf.SelectSingleNode(@"/Service/Info/UpdateRate");

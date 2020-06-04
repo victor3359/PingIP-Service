@@ -22,7 +22,7 @@ namespace PingIP_Service
 
                 x.SetServiceName(@"ICP61850");
                 x.SetDisplayName(@"ICP61850-Service");
-                x.SetDescription(@"Iec61850 Server is Listening on Port 102. The Project is for Yantian by ICPSI.");
+                x.SetDescription(@"Iec61850 Server is Listening on Port 10102. The Project is for Yantian by ICPSI.");
 
 
 

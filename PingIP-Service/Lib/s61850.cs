@@ -1,6 +1,7 @@
 ﻿using System;
 using IEC61850.Server;
 using IEC61850.Common;
+using IEC61850.GOOSE.Subscriber;
 
 namespace PingIP_Service
 {
@@ -9,16 +10,15 @@ namespace PingIP_Service
 		private IedModel iedModel;
 		private IedServerConfig config;
 		private IedServer iedServer;
-
-        public s61850()
+		public s61850()
 		{
 			iedModel = ConfigFileParser.CreateModelFromConfigFile("model.cfg");
-
 			if (iedModel == null)
 			{
 				Console.WriteLine("SYSERR: No Valid DataModel Found!");
 				return;
 			}
+			
 
 			config = new IedServerConfig();
 			config.ReportBufferSize = 100000;
@@ -26,10 +26,27 @@ namespace PingIP_Service
 			iedServer = new IedServer(iedModel, config);
 
 
-			iedServer.Start(102);
-			Console.WriteLine("SYSLOG: Iec61850 Server is Listening on port 102.");
+			iedServer.Start(10102);
+			Console.WriteLine("SYSLOG: Iec61850 Server is Listening on port 10102.");
 
 			GC.Collect();
+
+			/*//Interface id: 0(\Device\NPF_{ 874C4A5F - 2D90 - 42E8 - AFD3 - E76B65365490})
+			Console.WriteLine("Starting GOOSE subscriber...");
+
+			GooseReceiver receiver = new GooseReceiver();
+
+			receiver.SetInterfaceId(@"0");
+
+			GooseSubscriber subscriber = new GooseSubscriber("TIESYS/LLN0$GO$gcb01");
+
+			subscriber.SetAppId(1000);
+
+			subscriber.SetListener(gooseListener, null);
+
+			receiver.AddSubscriber(subscriber);
+
+			receiver.Start();*/
 		}
 
 		public void ModifyFloatValue(string ObjRef, string value)
@@ -85,5 +102,24 @@ namespace PingIP_Service
 
 			iedServer.Destroy();
 		}
-    }
+
+		/*private static void gooseListener(GooseSubscriber subscriber, object parameter)
+		{
+			Console.WriteLine("Received GOOSE message:\n-------------------------");
+
+			Console.WriteLine("  stNum: " + subscriber.GetStNum());
+
+			Console.WriteLine("  sqNum: " + subscriber.GetSqNum());
+
+
+			MmsValue values = subscriber.GetDataSetValues();
+
+			Console.WriteLine("  values: " + values.Size().ToString());
+
+			foreach (MmsValue value in values)
+			{
+				Console.WriteLine("   value: " + value.ToString());
+			}
+		}*/
+	}
 }
