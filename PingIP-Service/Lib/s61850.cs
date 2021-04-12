@@ -27,10 +27,10 @@ namespace PingIP_Service
 
 
 			iedServer.Start(10102);
-			Console.WriteLine("SYSLOG: Iec61850 Server is Listening on port 10102.");
+			Console.WriteLine("SYSLOG: Iec61850 Server is Listening on port 10103.");
 			GC.Collect();
 
-			Console.WriteLine("Starting GOOSE subscriber...");
+			/*Console.WriteLine("Starting GOOSE subscriber...");
 
 			GooseReceiver receiver = new GooseReceiver();
 			//\Device\NPF_{874C4A5F-2D90-42E8-AFD3-E76B65365490}
@@ -44,7 +44,7 @@ namespace PingIP_Service
 
 			receiver.AddSubscriber(subscriber);
 
-			receiver.Start();
+			receiver.Start();*/
 		}
 
 		public void ModifyFloatValue(string ObjRef, string value)
@@ -111,7 +111,7 @@ namespace PingIP_Service
 
 			iedServer.Destroy();
 		}
-
+		/*
 		private static void gooseListener(GooseSubscriber subscriber, object parameter)
 		{
 			Console.WriteLine("Received GOOSE message:\n-------------------------");
@@ -129,6 +129,6 @@ namespace PingIP_Service
 			{
 				Console.WriteLine("   value: " + value.ToString());
 			}
-		}
+		}*/
 	}
 }

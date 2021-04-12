@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml;
 using System.Linq;
 using System.Timers;
@@ -12,10 +13,12 @@ namespace PingIP_Service
     class PingIP
     {
         private readonly Timer _timer;
+        private DateTime TimeStamp;
         private List<IpDevice> IpTable = new List<IpDevice>();
         private static int updRate;
         private static string xmlConfigFileName = @"PingIpConfig.xml";
         private static string xmlOutputFileName = @"PingIpOutput.xml";
+        //private static string EventLogFileName = @"Events.log";
         s61850 s61850;
         //m61850 m61850;
 
@@ -24,6 +27,15 @@ namespace PingIP_Service
             ReadConfiguration();
             _timer = new Timer(updRate) { AutoReset = true };
             _timer.Elapsed += timerElapsed;
+
+            /*if (!File.Exists(EventLogFileName))
+            {
+                using (StreamWriter sw = File.CreateText(EventLogFileName))
+                {
+                    string RawText = $"MachineName, IpAddress, PingStatus, TimeStamp";
+                    sw.WriteLine(RawText);
+                }
+            }*/
         }
 
         private void timerElapsed(object sender, ElapsedEventArgs e)
@@ -62,7 +74,18 @@ namespace PingIP_Service
 
             (from ip in IpTable
              where ip.IpAddress == e.UserState.ToString()
-             select ip).ToList().ForEach(x => x.IpStatus = e.Reply.Status);
+             select ip).ToList().ForEach(x => {
+                 if (!x.IpAddress.Equals(e.Reply.Status))
+                 {
+                     x.IpStatus = e.Reply.Status;
+                     TimeStamp = DateTime.Now;
+                     string RawText = $"{x.MachineName}, {x.IpAddress}, {x.IpStatus}, {TimeStamp}";
+                     /*using (StreamWriter sw = File.AppendText(EventLogFileName))
+                     {
+                         sw.WriteLine(RawText);
+                     }*/
+                 }
+                 });
         }
 
         private void IpTableSavingXml()
@@ -102,7 +125,7 @@ namespace PingIP_Service
             try
             {
                 s61850 = new s61850();
-                //m61850 = new m61850("192.168.100.195");
+                //m61850 = new m61850("172.21.37.1");
                 xmlconf.Load(xmlConfigFileName);
 
                 xmlNode = xmlconf.SelectSingleNode(@"/Service/Info/UpdateRate");

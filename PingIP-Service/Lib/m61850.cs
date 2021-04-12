@@ -76,7 +76,7 @@ namespace PingIP_Service
 					BinaryWriter w = new BinaryWriter(fs);
 					fileList.Add(entry);
 					_conn.GetFile(entry, new IedConnection.GetFileHandler(getFileHandler), w);
-					fs.Close();
+					//fs.Close();
 				}
 			}
 			_conn.Abort();
