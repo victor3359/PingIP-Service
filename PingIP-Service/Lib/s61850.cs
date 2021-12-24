@@ -26,7 +26,7 @@ namespace PingIP_Service
 			iedServer = new IedServer(iedModel, config);
 
 
-			iedServer.Start(10102);
+			iedServer.Start(10103);
 			Console.WriteLine("SYSLOG: Iec61850 Server is Listening on port 10103.");
 			GC.Collect();
 

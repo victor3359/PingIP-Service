@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Topshelf;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace PingIP_Service
 {
@@ -20,9 +21,9 @@ namespace PingIP_Service
 
                 x.RunAsLocalSystem();
 
-                x.SetServiceName(@"ICP61850");
-                x.SetDisplayName(@"ICP61850-Service");
-                x.SetDescription(@"Iec61850 Server is Listening on Port 10102. The Project is for Yantian by ICPSI.");
+                x.SetServiceName(@"ICP61850-ICMP");
+                x.SetDisplayName(@"ICMP-Service");
+                x.SetDescription(@"ICMP Service as IEC61850 Server is Listening on Port 10103. The Project is for Heshun by ICPSI.");
 
 
 
